@@ -3,6 +3,11 @@ import axios from "axios";
 axios.defaults.headers.common["x-api-key"] = "live_Tw25qqZGTgRzQUEFXOfLqmslZZwx9HXbjDePGI0ZChRJtxUAscxAhnVEo8KUClDE";
 
 import { fetchBreeds, fetchCatByBreed } from './cat-api';
+import SlimSelect from 'slim-select';
+
+new SlimSelect({
+  select: breedSelect,
+});
 
 const breedSelect = document.querySelector(".breed-select");
 const loader = document.querySelector('.loader');
@@ -18,32 +23,60 @@ breedSelect.addEventListener('change', () => {
 
   if (selectedBreedId) {
     loader.hidden = false;
+    
     fetchCatByBreed(selectedBreedId)
     .then(catData => {
-      
+      const catInfoContainer = document.querySelector('.cat-info');
+      catInfoContainer.innerHTML = '';
+
+      const catInfoWrapper = document.createElement("div");
+      catInfoWrapper.style.display = "flex";
+
+      const catImage = document.createElement("img");
+      catImage.src = catData.url;
+      catImage.alt = catData.name;
+      catImage.style.width = "50%";
+      catImage.style.height = "auto";
+
+      catImage.style.maxHeight = '300px';
+      catImage.style.width = 'auto';
+      catImage.style.border = '5px double gray';
+      catImage.style.flex = "1";
+
+      catImage.loading = "lazy";
+
+      const textInfoContainer = document.createElement("div");
+      textInfoContainer.style.flex = "2";  
+      textInfoContainer.style.display = "flex";
+      textInfoContainer.style.flexDirection = "column";
+      textInfoContainer.style.alignItems = "flex-start";
+
       const catName = document.createElement("h2");
-  catName.textContent = catData.name;
+      catName.textContent = catData.breeds[0].name;
+      catName.style.margin = "0";
 
-  const catImage = document.createElement("img");
-  catImage.src = catData.url;
-  catImage.alt = catData.name;
+      const catDescription = document.createElement("p");
+      catDescription.textContent = `Description: ${catData.breeds[0].description}`;
 
-  const catInfoContainer = document.querySelector('.cat-info');
+      const catTemperament = document.createElement("p");
+      catTemperament.textContent = `Temperament: ${catData.breeds[0].temperament}`;
 
-  catInfoContainer.innerHTML = '';
-  catInfoContainer.appendChild(catName);
-  catInfoContainer.appendChild(catImage);
+      textInfoContainer.appendChild(catName);
+      textInfoContainer.appendChild(catDescription);
+      textInfoContainer.appendChild(catTemperament);
 
-  loader.hidden = true;
+      catInfoWrapper.appendChild(textInfoContainer);
+      catInfoWrapper.appendChild(catImage);
+      catInfoContainer.appendChild(catInfoWrapper);
 
+      loader.hidden = true;
     })
     .catch(error => {
       console.error("Ошибка при загрузке информации о кошке:", error);
-      error.hidden = false; 
-      loader.hidden = true; 
+      error.hidden = false;
+      loader.hidden = true;
     });
-}
+  }
 });
 
 fetchBreeds(breedSelect);
-

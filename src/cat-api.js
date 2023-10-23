@@ -1,5 +1,10 @@
 import axios from 'axios';
-import { BASE_URL } from './index'
+import { BASE_URL } from './index';
+import SlimSelect from 'slim-select';
+
+new SlimSelect({
+  select: breedSelect,
+});
 
 export async function fetchBreeds(breedSelect, onSuccess, onError) {
 
@@ -32,11 +37,11 @@ export async function fetchBreeds(breedSelect, onSuccess, onError) {
 export async function fetchCatByBreed(breedId) {
   const BASE_URL = 'https://api.thecatapi.com/v1';
 
-  try {
-        const response = await axios.get(`${BASE_URL}/images/search?breed_ids=${breedId}`);
-        return response.data[0];
-    } catch (error) {
-        console.error("Ошибка при загрузке информации о котах:", error);
-        throw error;
-    }
+  return axios
+    .get(`${BASE_URL}/images/search?breed_ids=${breedId}&include_breeds=true`)
+    .then(response => response.data[0])
+    .catch(error => {
+      console.error("Ошибка при загрузке информации о коте:", error);
+      throw error;
+    });
 }
