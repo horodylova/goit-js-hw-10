@@ -1,13 +1,15 @@
 import axios from 'axios';
+import Notiflix from 'notiflix'; 
 import { BASE_URL } from './index';
-// import SlimSelect from 'slim-select';
 
-// new SlimSelect({
-//   select: breedSelect,
-// });
+const error = document.querySelector('.error');
+const loader = document.querySelector('.loader');
+
+loader.hidden = true;
+error.hidden = true;
 
 export async function fetchBreeds(breedSelect, onSuccess, onError) {
-
+  Notiflix.Loading.standard('Loading breeds, please wait...'); 
   
     axios.get(`${BASE_URL}/breeds`)
       .then(response => {
@@ -25,23 +27,31 @@ export async function fetchBreeds(breedSelect, onSuccess, onError) {
         }
       })
       .catch(err => {
-        console.error("Ошибка при загрузке списка пород кошек:", err);
-        error.hidden = false;
+        Notiflix.Notify.failure('Oops! Something went wrong. Please try again.'); 
+        
   
         if (onError) {
           onError();
         }
+        Notiflix.Notify.failure('Oops! Something went wrong. Please try again.'); 
       });
   }
 
 export async function fetchCatByBreed(breedId) {
+  Notiflix.Loading.standard('Loading cat info, please wait...'); 
+
   const BASE_URL = 'https://api.thecatapi.com/v1';
 
   return axios
     .get(`${BASE_URL}/images/search?breed_ids=${breedId}&include_breeds=true`)
     .then(response => response.data[0])
+    .then(catData => {
+      Notiflix.Loading.remove(); 
+      return catData;
+    })
     .catch(error => {
-      console.error("Ошибка при загрузке информации о коте:", error);
+      Notiflix.Notify.failure('Oops! Something went wrong. Please try again.'); 
+      Notiflix.Loading.remove();
       throw error;
     });
 }
