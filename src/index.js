@@ -3,18 +3,24 @@ import { fetchBreeds, fetchCatByBreed } from './cat-api';
 
 const breedSelect = document.querySelector(".breed-select");
 const error = document.querySelector('.error');
-const loader = document.querySelector('.loader')
+const loader = document.querySelector('.loader');
 
 loader.hidden = true;
 error.hidden = true;
 
+let isLoading = false; 
+
 export const BASE_URL = 'https://api.thecatapi.com/v1';
 
 breedSelect.addEventListener('change', () => {
-  const selectedBreedId = breedSelect.value;
+  if (isLoading) {
+    return; 
+  }
 
-
+  isLoading = true; 
   Notiflix.Loading.standard('Loading data, please wait...');
+
+  const selectedBreedId = breedSelect.value;
 
   if (selectedBreedId) {
     fetchCatByBreed(selectedBreedId)
@@ -61,13 +67,14 @@ breedSelect.addEventListener('change', () => {
         catInfoContainer.appendChild(catInfoWrapper);
 
         Notiflix.Loading.remove();
+        error.hidden = true;
+        isLoading = false; 
       })
       .catch(error => {
-  
-        error.hidden = false;
-    
         Notiflix.Notify.failure('Oops! Something went wrong! Try reloading the page!');
         Notiflix.Loading.remove();
+        error.hidden = false;
+        isLoading = false;
       });
   }
 });
