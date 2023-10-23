@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { BASE_URL } from './index';
-import SlimSelect from 'slim-select';
+// import SlimSelect from 'slim-select';
 
-new SlimSelect({
-  select: breedSelect,
-});
+// new SlimSelect({
+//   select: breedSelect,
+// });
 
 export async function fetchBreeds(breedSelect, onSuccess, onError) {
 
