@@ -2,6 +2,8 @@ import axios from 'axios';
 import Notiflix from 'notiflix'; 
 const BASE_URL = 'https://api.thecatapi.com/v1';
 
+const selectEl = document.querySelector('.breed-select');
+
 export async function fetchBreeds(breedSelect, onSuccess, onError) {
   
     axios.get(`${BASE_URL}/breeds`)
@@ -13,6 +15,8 @@ export async function fetchBreeds(breedSelect, onSuccess, onError) {
           option.value = breed.id; 
           option.text = breed.name;
           breedSelect.appendChild(option);
+
+          selectEl.classList.remove("is-hidden");
         });
   
         if (onSuccess) {
