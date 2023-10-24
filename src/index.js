@@ -15,7 +15,8 @@ loader.hidden = true;
 error.hidden = true;
 
 breedSelect.addEventListener('change', () => {
-  breedSelect.disabled = true;
+  breedSelect.hidden = true;
+  loader.hidden = false;
   Notiflix.Loading.standard('Loading data, please wait...');
 
   const selectedBreedId = breedSelect.value;
@@ -68,7 +69,8 @@ breedSelect.addEventListener('change', () => {
       catInfoWrapper.appendChild(catImage);
       catInfoContainer.appendChild(catInfoWrapper);
 
-      breedSelect.disabled = false;
+      breedSelect.hidden = false;
+      loader.hidden = true;
 
       Notiflix.Loading.remove(); 
     })
