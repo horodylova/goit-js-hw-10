@@ -17,6 +17,7 @@ error.hidden = true;
 breedSelect.addEventListener('change', () => {
   breedSelect.hidden = true;
   loader.hidden = false;
+  
   Notiflix.Loading.standard('Loading data, please wait...');
 
   const selectedBreedId = breedSelect.value;
