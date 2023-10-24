@@ -11,8 +11,8 @@ const breedSelect = document.querySelector(".breed-select");
 const loader = document.querySelector('.loader');
 const error = document.querySelector('.error');
 
-loader.hidden = true;
-error.hidden = true;
+// loader.hidden = true;
+// error.hidden = true;
 
 breedSelect.addEventListener('change', () => {
 
